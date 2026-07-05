@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>リングフィット 専用素材→スムージー早見表</title>
+<style>
+  :root{
+    --bg:#0F1319; --card:#1A212B; --card2:#141A22; --line:#2A3441;
+    --text:#EAEFF5; --sub:#9AA7B5;
+    --red:#FF5A6E; --yellow:#FFC53D; --blue:#4DA3FF; --green:#55D77A;
+    --purple:#B07CFF; --pink:#FF8AC2; --gray:#8FA0B0; --rainbow:linear-gradient(135deg,#FF5A6E,#FFC53D,#55D77A,#4DA3FF);
+  }
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",system-ui,sans-serif;
+    font-size:15px; line-height:1.55;
+    padding-bottom:48px;
+  }
+  header{
+    padding:20px 16px 12px;
+    background:radial-gradient(120% 100% at 50% 0%, #1C2633 0%, var(--bg) 70%);
+  }
+  header h1{
+    font-size:20px; font-weight:800; letter-spacing:.02em; line-height:1.3;
+  }
+  header h1 .ring{
+    display:inline-block; width:16px; height:16px; border-radius:50%;
+    border:4px solid transparent;
+    background:linear-gradient(var(--bg),var(--bg)) padding-box, var(--rainbow) border-box;
+    vertical-align:-1px; margin-right:6px;
+  }
+  header p{color:var(--sub); font-size:12.5px; margin-top:6px;}
+  .sticky{
+    position:sticky; top:0; z-index:10;
+    background:rgba(15,19,25,.94); backdrop-filter:blur(6px);
+    padding:10px 16px 10px; border-bottom:1px solid var(--line);
+  }
+  #search{
+    width:100%; padding:10px 14px; border-radius:12px;
+    border:1px solid var(--line); background:var(--card); color:var(--text);
+    font-size:15px; outline:none;
+  }
+  #search:focus{border-color:var(--blue);}
+  .chips{display:flex; gap:6px; overflow-x:auto; padding-top:8px; scrollbar-width:none;}
+  .chips::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:none; padding:5px 12px; border-radius:999px; font-size:12.5px; font-weight:600;
+    border:1px solid var(--line); background:var(--card2); color:var(--sub); cursor:pointer;
+  }
+  .chip.on{color:#0F1319; background:var(--text); border-color:var(--text);}
+  main{padding:12px 12px 0;}
+  .count{color:var(--sub); font-size:12px; padding:2px 4px 8px;}
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:12px 14px 12px 16px; margin-bottom:10px; position:relative; overflow:hidden;
+  }
+  .card::before{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:5px;
+    background:var(--c,var(--gray));
+  }
+  .card.rainbow::before{background:var(--rainbow);}
+  .mat{font-size:19px; font-weight:800; letter-spacing:.01em;}
+  .arrow{color:var(--sub); font-size:13px; margin:0 4px;}
+  .smoothie{font-size:15px; font-weight:700; color:var(--c,var(--text));}
+  .card.rainbow .smoothie{color:var(--yellow);}
+  .row{display:flex; align-items:baseline; flex-wrap:wrap; gap:2px 0;}
+  .tag{
+    float:right; font-size:11px; font-weight:700; padding:2px 8px; border-radius:6px;
+    color:#0F1319; background:var(--c,var(--gray)); margin-left:8px;
+  }
+  .card.rainbow .tag{background:var(--rainbow);}
+  .eff{font-size:13px; color:var(--text); margin-top:6px;}
+  .rec{font-size:12.5px; color:var(--sub); margin-top:3px;}
+  .rec b{color:var(--text); font-weight:700;}
+  details{
+    margin:20px 12px 0; background:var(--card2); border:1px solid var(--line); border-radius:14px;
+  }
+  summary{
+    padding:12px 16px; font-weight:700; font-size:14px; cursor:pointer; list-style:none;
+  }
+  summary::before{content:"▸ "; color:var(--sub);}
+  details[open] summary::before{content:"▾ ";}
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  th,td{padding:7px 10px; text-align:left; border-top:1px solid var(--line);}
+  th{color:var(--sub); font-weight:600; font-size:12px;}
+  td.n{text-align:right; font-variant-numeric:tabular-nums;}
+  tr.solo td{color:var(--yellow); font-weight:700;}
+  footer{padding:20px 16px 8px; color:var(--sub); font-size:11.5px; line-height:1.7;}
+  footer a{color:var(--blue); text-decoration:none;}
+  .empty{color:var(--sub); text-align:center; padding:30px 0; display:none;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="ring"></span>専用素材 → スムージー早見表</h1>
+  <p>1種類のスムージーにしか使わない素材（全27種）。入手したら対象スムージー作成を優先しよう。</p>
+</header>
+
+<div class="sticky">
+  <input id="search" type="search" placeholder="素材名・スムージー名で検索" autocomplete="off">
+  <div class="chips" id="chips">
+    <button class="chip on" data-f="all">すべて</button>
+    <button class="chip" data-f="便利">便利系</button>
+    <button class="chip" data-f="復活">復活</button>
+    <button class="chip" data-f="防御">防御</button>
+    <button class="chip" data-f="赤">赤UP</button>
+    <button class="chip" data-f="黄・全色">全色</button>
+    <button class="chip" data-f="青">青UP</button>
+    <button class="chip" data-f="緑">緑UP</button>
+  </div>
+</div>
+
+<main>
+  <div class="count" id="count"></div>
+  <div id="list"></div>
+  <div class="empty" id="empty">該当なし</div>
+</main>
+
+<details>
+  <summary>参考：全素材の使用スムージー数（黄色＝専用素材）</summary>
+  <table id="usage"></table>
+</details>
+
+<footer>
+  出典：リングフィットアドベンチャー攻略wiki（wiki3.jp/ring）／KAKKON.NET スムージー全一覧を基に集計（2026-07-05時点）。<br>
+  ※フォースライト等の宝石系素材はスムージーには使用しない（ウェア購入用）ため対象外。<br>
+  ※このファイルはスマホのブラウザで開けます。ホーム画面に追加するといつでも参照できます。
+</footer>
+
+<script>
+const DATA = [
+ // cat: 便利 / 復活 / 防御 / 赤 / 青 / 緑 / 黄・全色
+ {mat:"白ごま", smo:"ごまスムージー", eff:"【コース】素材の入手数が2倍", rec:"バナナ×1｜白ごま×2", cat:"便利", c:"gray"},
+ {mat:"キャベツ", smo:"キャベツのソイポタージュ", eff:"【コース】素材の入手数が2倍", rec:"豆乳×1｜キャベツ×2", cat:"便利", c:"gray"},
+ {mat:"柿", smo:"柿スムージー", eff:"【バトル】EXP（経験値）2倍", rec:"柿×4", cat:"便利", c:"gray"},
+ {mat:"かぼちゃ", smo:"かぼちゃスープ", eff:"【バトル】お金2倍", rec:"豆乳×3｜かぼちゃ×2", cat:"便利", c:"gray"},
+ {mat:"ドラゴンフルーツ", smo:"ドラゴンドリンク", eff:"レベルが1つ上がる", rec:"ドラゴンフルーツ×5", cat:"便利", c:"gray"},
+ {mat:"ゼラチン", smo:"牛乳プリン", eff:"【コース】ダッシュ・もも上げが楽に", rec:"牛乳×2｜ゼラチン×1", cat:"便利", c:"gray"},
+ {mat:"ケフィアグレイン", smo:"ケフィアヨーグルト", eff:"【バトル】魔物が出なくなる", rec:"ヨーグルト×1｜ケフィアグレイン×2", cat:"便利", c:"gray"},
+ {mat:"クリームチーズ", smo:"チーズオニオンスープ", eff:"【バトル】魔物が出なくなる", rec:"玉ねぎ×2｜クリームチーズ×1", cat:"便利", c:"gray"},
+
+ {mat:"ピンクグレープフルーツ", smo:"ピンクグレープフルーツスムージー", eff:"復活（回復♥×8・最強の復活役）", rec:"ピンクグレープフルーツ×3", cat:"復活", c:"pink"},
+ {mat:"チェリー", smo:"チェリースムージー", eff:"復活（回復♥×5.5）", rec:"チェリー×3", cat:"復活", c:"pink"},
+ {mat:"スイカ", smo:"スイカスムージー", eff:"復活（回復♥×5）", rec:"スイカ×3", cat:"復活", c:"pink"},
+ {mat:"グアバ", smo:"グアバスムージー", eff:"復活（回復♥×4.5）", rec:"グアバ×3", cat:"復活", c:"pink"},
+
+ {mat:"カカオ", smo:"ココア", eff:"防御力アップ", rec:"カカオ×2", cat:"防御", c:"gray"},
+ {mat:"ほうじ茶葉", smo:"ほうじ茶ラテ", eff:"回復♥×2.5＋防御力アップ", rec:"牛乳×1｜ほうじ茶葉×2", cat:"防御", c:"gray"},
+
+ {mat:"フェンネル", smo:"ディープレッドスムージー", eff:"回復♥×7｜赤色攻撃力超アップ＋スキル色替え", rec:"いちご×2｜ラズベリー×2｜フェンネル×2", cat:"赤", c:"red"},
+ {mat:"パセリ", smo:"レッドムーンスムージー", eff:"回復♥×4.5｜赤色攻撃力超アップ＋ラッシュ確定", rec:"いちじく×2｜トマト×2｜パセリ×2", cat:"赤", c:"red"},
+ {mat:"ブラッドオレンジ", smo:"ブラッドオレンジジュース", eff:"回復♥×5.5｜赤色攻撃力超アップ", rec:"いちご×1｜ブラッドオレンジ×2", cat:"赤", c:"red"},
+ {mat:"プラム", smo:"プラムジュース", eff:"赤色攻撃力アップ＋スキル色替え（赤）", rec:"酢×2｜プラム×1｜砂糖×1", cat:"赤", c:"red"},
+
+ {mat:"みかん", smo:"トロピカルスムージー", eff:"全色攻撃力超アップ（最強格のバフ）", rec:"パイナップル×2｜みかん×2｜パパイヤ×2", cat:"黄・全色", c:"rainbow"},
+
+ {mat:"つるむらさき", smo:"ディープパープルスムージー", eff:"回復♥×7｜青色攻撃力超アップ＋スキル色替え", rec:"ぶどう×2｜カシス×2｜つるむらさき×2", cat:"青", c:"purple"},
+
+ {mat:"ターサイ", smo:"ディープライムグリーンスムージー", eff:"回復♥×7｜緑色攻撃力超アップ＋スキル色替え", rec:"緑茶葉×2｜ライム×2｜ターサイ×2", cat:"緑", c:"green"},
+ {mat:"レタス", smo:"レタスとミルクのスムージー", eff:"回復♥×4｜緑色攻撃力超アップ", rec:"牛乳×2｜レタス×1", cat:"緑", c:"green"},
+ {mat:"キウイ", smo:"キウイスムージー", eff:"緑色攻撃力超アップ＋待機ターンリセット", rec:"りんご×1｜キウイ×2", cat:"緑", c:"green"},
+ {mat:"洋ナシ", smo:"洋ナシジュース", eff:"緑色攻撃力超アップ＋スキル色替え（緑）", rec:"洋ナシ×3", cat:"緑", c:"green"},
+ {mat:"大葉", smo:"大葉スムージー", eff:"スキル色替え（緑）", rec:"レモン×1｜大葉×2", cat:"緑", c:"green"},
+ {mat:"メロン", smo:"クリームソーダ", eff:"回復♥×2｜スキル色替え（緑）", rec:"メロン×2｜バニラアイス×1｜炭酸水×1", cat:"緑", c:"green"},
+ {mat:"ミント", smo:"バジルミントスムージー", eff:"回復♥×5.5｜待機ターンリセット", rec:"豆乳×2｜バジル×1｜ミント×1", cat:"緑", c:"green"}
+];
+
+// 全素材の使用スムージー数（レシピ全116種を集計）
+const USAGE = [
+ ["バナナ",9],["シナモン",8],["牛乳",7],["ブルーベリー",7],["りんご",6],["炭酸水",6],
+ ["アプリコット",6],["バニラアイス",6],["ほうれん草",5],["いちご",5],["レモン",5],["トマト",5],
+ ["砂糖",5],["紅茶葉",5],["ぶどう",4],["ザクロ",4],["玉ねぎ",4],["豆乳",4],["ヨーグルト",4],
+ ["はちみつ",4],["フダンソウ",4],["バジル",4],["アーモンドミルク",4],["パイナップル",4],
+ ["ショウガ",4],["レモングラス",4],["緑茶葉",3],["酢",3],["モモ",3],["プルーン",3],["マンゴー",3],
+ ["パパイヤ",3],["ルッコラ",3],["明日葉",3],["いちじく",3],["クランベリー",3],["トレビス",3],
+ ["ラズベリー",3],["ケール",3],["アボカド",3],["ライム",3],["ニンジン",2],["レーズン",2],
+ ["クレソン",2],["オレンジ",2],["チアシード",2],["アスパラガス",2],["抹茶パウダー",2],
+ ["グレープフルーツ",2],["トウモロコシ",2],["キャラメル",2],["コーヒー豆",2],["カシス",2],
+ ["ラベンダー",2],["セロリ",2],["ウィートグラス",2],
+ ["白ごま",1],["ゼラチン",1],["かぼちゃ",1],["キャベツ",1],["柿",1],["ドラゴンフルーツ",1],
+ ["ケフィアグレイン",1],["クリームチーズ",1],["カカオ",1],["ほうじ茶葉",1],["スイカ",1],
+ ["グアバ",1],["チェリー",1],["ピンクグレープフルーツ",1],["ブラッドオレンジ",1],["プラム",1],
+ ["パセリ",1],["フェンネル",1],["みかん",1],["つるむらさき",1],["ターサイ",1],["メロン",1],
+ ["大葉",1],["ミント",1],["レタス",1],["キウイ",1],["洋ナシ",1]
+];
+
+const COLORS={red:"var(--red)",yellow:"var(--yellow)",blue:"var(--blue)",green:"var(--green)",purple:"var(--purple)",pink:"var(--pink)",gray:"var(--gray)"};
+const list=document.getElementById("list");
+const empty=document.getElementById("empty");
+const countEl=document.getElementById("count");
+let filter="all", q="";
+
+function render(){
+  list.innerHTML="";
+  let n=0;
+  DATA.forEach(d=>{
+    const hit=(filter==="all"||d.cat===filter) &&
+      (q===""||d.mat.includes(q)||d.smo.includes(q)||d.eff.includes(q));
+    if(!hit) return;
+    n++;
+    const el=document.createElement("div");
+    el.className="card"+(d.c==="rainbow"?" rainbow":"");
+    if(d.c!=="rainbow") el.style.setProperty("--c",COLORS[d.c]);
+    el.innerHTML=
+      '<span class="tag">'+d.cat+'</span>'+
+      '<div class="row"><span class="mat">'+d.mat+'</span>'+
+      '<span class="arrow">→</span><span class="smoothie">'+d.smo+'</span></div>'+
+      '<div class="eff">'+d.eff+'</div>'+
+      '<div class="rec">レシピ：<b>'+d.rec+'</b></div>';
+    list.appendChild(el);
+  });
+  countEl.textContent=n+"件 / 全"+DATA.length+"件";
+  empty.style.display=n?"none":"block";
+}
+
+document.getElementById("search").addEventListener("input",e=>{q=e.target.value.trim(); render();});
+document.getElementById("chips").addEventListener("click",e=>{
+  const b=e.target.closest(".chip"); if(!b) return;
+  document.querySelectorAll(".chip").forEach(c=>c.classList.remove("on"));
+  b.classList.add("on"); filter=b.dataset.f; render();
+});
+
+const tbl=document.getElementById("usage");
+tbl.innerHTML="<tr><th>素材</th><th style='text-align:right'>使用数</th></tr>"+
+  USAGE.map(u=>'<tr class="'+(u[1]===1?"solo":"")+'"><td>'+u[0]+'</td><td class="n">'+u[1]+'</td></tr>').join("");
+
+render();
+</script>
+</body>
+</html>
